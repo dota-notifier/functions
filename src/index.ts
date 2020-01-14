@@ -10,11 +10,21 @@ export const notify = functions.https.onRequest(async (request, response) => {
 
   await admin.messaging().send({
     android: {
+      collapseKey: 'dota',
+      notification: {
+        sound: 'match_ready_no_focus.mp3'
+      },
       priority: 'high'
     },
     apns: {
       headers: {
+        'apns-collapse-id': 'dota',
         'apns-priority': '10'
+      },
+      payload: {
+        aps: {
+          sound: 'match_ready_no_focus.caf'
+        }
       }
     },
     notification: {
