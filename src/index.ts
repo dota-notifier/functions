@@ -12,6 +12,7 @@ export const notify = functions.https.onRequest(async (request, response) => {
     Type === 'READY_CHECK'
       ? 'A ready check has been requested'
       : 'Your game is ready'
+  const channelId = Type === 'READY_CHECK' ? 'ready_check' : 'match_ready'
   const sound =
     Type === 'READY_CHECK'
       ? 'ready_check_no_focus.wav'
@@ -21,6 +22,7 @@ export const notify = functions.https.onRequest(async (request, response) => {
     android: {
       collapseKey: 'dota',
       notification: {
+        channelId,
         sound
       },
       priority: 'high'
