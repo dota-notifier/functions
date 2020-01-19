@@ -5,14 +5,23 @@ admin.initializeApp(functions.config().firebase)
 
 export const notify = functions.https.onRequest(async (request, response) => {
   const {
-    body: { Id } // pascal case
+    body: { Id, Type } // pascal case
   } = request
+
+  const body =
+    Type === 'READY_CHECK'
+      ? 'A ready check has been requested'
+      : 'Your game is ready'
+  const sound =
+    Type === 'READY_CHECK'
+      ? 'ready_check_no_focus.wav'
+      : 'match_ready_no_focus.wav'
 
   await admin.messaging().send({
     android: {
       collapseKey: 'dota',
       notification: {
-        sound: 'match_ready_no_focus.mp3'
+        sound
       },
       priority: 'high'
     },
@@ -23,12 +32,12 @@ export const notify = functions.https.onRequest(async (request, response) => {
       },
       payload: {
         aps: {
-          sound: 'match_ready_no_focus.caf'
+          sound
         }
       }
     },
     notification: {
-      body: 'Dota 2 has come to the foreground!'
+      body
     },
     topic: Id
   })
